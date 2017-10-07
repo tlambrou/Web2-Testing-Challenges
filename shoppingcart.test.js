@@ -1,9 +1,8 @@
 // Tests for the shpping cart module
 
-var ShoppingCart = require('./shoppingcart').ShoppingCart
+var ShoppingCart = require('./shoppingcart')
 
-const chai = require('chai')
-const should = require('should');
+const expect = require('chai').expect
 
 it('Should create a new item with name and price', () => {
   const apple = {
@@ -13,9 +12,8 @@ it('Should create a new item with name and price', () => {
   var cart = new ShoppingCart()
   cart.addItem(apple)
 
-  console.log(cart.items)
-  should(cart.items[0]).have.property('name')
-  should(cart.items[0]).have.property('price')
+  // Test
+  expect(cart.firstItem()).to.have.keys('name', 'price', 'quantity')
 });
 
 it('Should add a new item to the shopping cart', () => {
@@ -30,8 +28,8 @@ it('Should add a new item to the shopping cart', () => {
   cart.addItem(brainz)
   const after = cart.items.length
 
-  //Test
-  after.should.equal(before + 1)
+  // Test
+  expect(after).to.equal(before + 1)
 
 });
 
@@ -47,10 +45,11 @@ it('Should return the number of items in the cart', () => {
   cart.addItem(morty)
   cart.addItem(morty)
 
-  //Test
-  cart.count.should.equal(4)
+  // Test
+  expect(cart.count()).to.equal(4)
 
 });
+
 it('Should return an array containing all items in cart', () => {
 
   const apple = { price: 0.89, name: "apple" }
@@ -65,8 +64,8 @@ it('Should return an array containing all items in cart', () => {
   cart.addItem(rick)
   cart.addItem(morty)
 
-  //Test
-  cart.items.should.be.an.instanceOf(Array)
+  // Test
+  expect(cart.cart()).to.be.an('array')
 
 });
 
@@ -84,12 +83,12 @@ it('Should remove items from cart', () => {
   cart.addItem(rick)
   cart.addItem(morty)
 
-  //Tests
-  cart.items.should.have.property('rick')
+  // Tests
+  expect(cart.getNames()).to.include.members(['rick'])
 
   cart.remove('rick')
 
-  cart.items.should.not.have.property('rick')
+  expect(cart.getNames()).to.not.include.members(['rick'])
 
 });
 
@@ -99,25 +98,21 @@ it('Should update the count of items in the cart', () => {
   const morty = { price: 99.99, name: "morty" }
   const rick = { price: 99999999999.99, name: "rick" }
 
+  // Tests
   var cart = new ShoppingCart()
-
-  cart.count.should.be.equal(0)
+  expect(cart.count()).to.equal(0)
 
   cart.addItem(morty)
-
-  cart.count.should.be.equal(1)
+  expect(cart.count()).to.equal(1)
 
   cart.addItem(rick)
-
-  cart.count.should.be.equal(2)
+  expect(cart.count()).to.equal(2)
 
   cart.addItem(morty)
-
-  cart.count.should.be.equal(3)
+  expect(cart.count()).to.equal(3)
 
   cart.remove('morty')
-
-  cart.count.should.be.equal(2)
+  expect(cart.count()).to.equal(2)
 
 });
 
@@ -127,13 +122,12 @@ it('Should remove an item when its count is 0', () => {
 
   var cart = new ShoppingCart()
 
+  // Tests
   cart.addItem(rick)
-
-  cart.count.should.be.equal(1)
+  expect(cart.count()).to.equal(1)
 
   cart.remove('rick')
-
-  cart.items.length.should.be.equal(0)
+  expect(cart.size()).to.equal(0)
 
 });
 
@@ -146,10 +140,11 @@ it('Should return the total cost of all items in the cart', () => {
   cart.addItem(rick)
   cart.addItem(morty)
 
-  cart.totalCost().should.be.equal(1000099.98)
+  // Tests
+  expect(cart.totalCost()).to.equal(1000099.98)
 
   cart.addItem(morty)
 
-  cart.totalCost().should.be.equal(1000199.97)
+  expect(cart.totalCost()).to.equal(1000199.97)
 
 });
